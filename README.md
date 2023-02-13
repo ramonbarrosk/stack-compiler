@@ -17,6 +17,8 @@
 - real
 - pilha of integer
 - pilha of real
+- inverte
+- concatena
 - procedure
 - function
 - read
@@ -33,3 +35,23 @@
 - input
 - output
 - length
+
+### Delimitadores
+- +
+- -
+- *
+- /
+- ,
+- #
+- =
+- >
+- <
+- >=
+- <=
+- <>
+- :
+- ;
+
+### Delimitadores duplos
+- //
+- ##
