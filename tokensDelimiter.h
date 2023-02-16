@@ -1,0 +1,27 @@
+#ifndef TOKENS_DELIMITER_H
+#define TOKENS_DELIMITER_H
+
+enum TokenDelimiter {
+    PLUS,
+    MINUS,
+    TIMES,
+    DIVIDE,
+    COMMA,
+    HASH,
+    EQUALS,
+    GREATER_THAN,
+    LESS_THAN,
+    GREATER_EQUALS,
+    LESS_EQUALS,
+    NOT_EQUALS,
+    COLON,
+    SEMICOLON,
+    DOUBLE_SLASH,
+    DOUBLE_HASH,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
+    LEFT_PARENTHESIS,
+    RIGHT_PARENTHESIS
+};
+
+#endif
