@@ -1,0 +1,31 @@
+#include "reservedWords.h"
+
+// Definição das palavras reservadas
+ReservedWord reservedWords[] = {
+    {"program", Token::PROGRAM},
+    {"begin", Token::BEGIN},
+    {"end", Token::END},
+    {"var", Token::VAR},
+    {"integer", Token::INTEGER},
+    {"real", Token::REAL},
+    {"pilha", Token::PILHA_OF_INTEGER},
+    {"of", Token::OF},
+    {"inverte", Token::INVERTE},
+    {"concatena", Token::CONCATENA},
+    {"procedure", Token::PROCEDURE},
+    {"function", Token::FUNCTION},
+    {"read", Token::READ},
+    {"write", Token::WRITE},
+    {"for", Token::FOR},
+    {"to", Token::TO},
+    {"do", Token::DO},
+    {"repeat", Token::REPEAT},
+    {"until", Token::UNTIL},
+    {"while", Token::WHILE},
+    {"if", Token::IF},
+    {"then", Token::THEN},
+    {"else", Token::ELSE},
+    {"input", Token::INPUT},
+    {"output", Token::OUTPUT},
+    {"length", Token::LENGTH},
+};
