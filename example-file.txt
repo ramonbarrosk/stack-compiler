@@ -1,7 +1,6 @@
 program meuPrograma;
 
-var 
-    x: integer;
-begin
+var x: integer;
+begin 
     x:= 10;
 end.

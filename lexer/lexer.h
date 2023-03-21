@@ -8,4 +8,4 @@
 
 using namespace std;
 
-vector<Token> lexicalAnalyzer(vector<string> script);
+vector<string> lexicalAnalyzer(vector<string> script);

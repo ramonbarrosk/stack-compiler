@@ -25,7 +25,7 @@ void initializeOperatorsVector() {
     operators.push_back("-");
     operators.push_back("*");
     operators.push_back("/");
-    operators.push_back("=");
+    operators.push_back(":=");
 }
 
 bool isAnOperator(string word) {
