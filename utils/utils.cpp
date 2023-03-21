@@ -12,11 +12,12 @@ bool is_letter(char c)
 }
 
 // Função que verifica se um caractere é um dígito
-bool is_digit(char c)
+bool is_digit(const string& str)
 {
-    return c >= '0' && c <= '9';
+    return !str.empty() && all_of(str.begin(), str.end(), [](char c) {
+        return isdigit(static_cast<unsigned char>(c));
+    });
 }
-
 // Função que verifica se um caractere é um espaço em branco
 bool is_whitespace(char c)
 {

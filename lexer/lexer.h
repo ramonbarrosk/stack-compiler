@@ -1,8 +1,11 @@
-#ifndef LEXER_H
-#define LEXER_H
-
 #include <string>
+#include <cstring>
+#include <vector>
 
-void lexer(const std::string &input_file);
+#pragma once
 
-#endif // LEXER_H
+#include "../bnf/types.h"
+
+using namespace std;
+
+void lexicalAnalyzer(vector<string> script);
