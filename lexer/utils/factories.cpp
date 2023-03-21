@@ -4,6 +4,8 @@
 #include "../../bnf/keywords.h"
 #include "../../bnf/operators.h"
 #include "../../bnf/delimiters.h"
+#include "../../bnf/identifiers.h"
+
 #include "../../bnf/types.h"
 #include "string-is-a-number.cpp"
 
