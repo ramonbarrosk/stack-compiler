@@ -21,6 +21,7 @@ void initializeDelimitersVector() {
     delimiters.push_back(",");
     delimiters.push_back("#");
     delimiters.push_back(":");
+    delimiters.push_back(".");
 }
 
 bool isADelimiter(string word) {
