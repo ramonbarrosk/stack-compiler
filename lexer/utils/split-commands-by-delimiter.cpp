@@ -10,19 +10,52 @@
 
 using namespace std;
 
-vector<string> splitCommandsByDelimiter(vector<string> script, char delim) {
-    vector<string> words;
+vector<string> splitCommandsByDelimiter(vector<string> script, char delim)
+{
+    // separa o código em linhas
+    string linha;
+    vector<string> tokens;
     for (int i = 0; i < script.size(); i++)
     {
-        stringstream ss(script[i]);
-        string tok;
-        while (getline(ss, tok, delim)) 
+        istringstream iss(script[i]);
+        // loop para processar cada linha
+        while (getline(iss, linha))
         {
-            if (!tok.empty())
+            // separa a linha em palavras
+            istringstream iss_linha(linha);
+            string palavra;
+            while (iss_linha >> palavra)
             {
-                words.push_back(tok);
+                // adiciona a palavra à lista de tokens
+                string token;
+                for (char c : palavra)
+                {
+                    if (c == ';' || c == '(' || c == ')' || c == '[' || c == ']' || c == '#' || c == '{' || c == '}' || c == ',')
+                    {
+                        // separa o caractere especial em um token separado
+                        if (!token.empty())
+                        {
+                            tokens.push_back(token);
+                            token.clear();
+                        }
+                        tokens.push_back(string(1, c));
+                    }
+                    else if (c == '.' && i + 1 < palavra.size() && isdigit(palavra[i + 1]))
+                    {
+                        // verifica se é um número real
+                        token += c;
+                    }
+                    else
+                    {
+                        token += c;
+                    }
+                }
+                if (!token.empty())
+                {
+                    tokens.push_back(token);
+                }
             }
         }
     }
-    return words;
+    return tokens;
 }

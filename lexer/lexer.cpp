@@ -17,6 +17,13 @@ vector<Token> lexicalAnalyzer(vector<string> script) {
     vector<string> commands = eat_first_blanks(script);
     commands = withdraw_spaces(commands);
     commands = splitCommandsByDelimiter(commands, ' ');
-    // criar automato ainda pqp (é necessário?);
+    //         for (int j = 0; j < commands.size(); j++)
+    // {
+    //     for (int k = 0; k < commands[j].size(); k++)
+    //     {
+    //     cout << commands[j][k];
+    //     }
+    //     cout << "\n";
+    // }
     return lexicalAnalyzerAutomata(commands);
 }
