@@ -15,7 +15,7 @@ using namespace std;
 Token handleCurrentCommandVerification(string command, int *characterStopped)
 {
     Token newToken;
-    newToken.content = "";
+    newToken.content = "stopVerification";
     newToken.type = IDENTIFIER;
 
     string currentCharacter (1, command[*characterStopped]);

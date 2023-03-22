@@ -1,32 +1,11 @@
 program exemplo1;
 var
-  x, y: integer;
-  p: pilha of real;
-  
-procedure imprime_soma(a: integer; b: integer);
-var c: integer;
+    x: integer;
+    p: pilha of real;
 begin
-  c := a + b;
-  write(c);
-end;
-
-function retorna_maior(a: integer; b: integer): integer;
-begin
-  if a > b then
-    retorna_maior := a
-  else
-    retorna_maior := b;
-end;
-
-begin
-  x := 5;
-  y := 10;
-  
-  imprime_soma(x, y);
-  
-  write(top(p));
-  
-  x := retorna_maior(x, y);
-  
-  write(x);
-end.
+    p := inverte(concatena(#1.2#,#3.4#));
+    for x := 1 to length(p) do
+    begin
+        write(p[x]);
+    end;
+end
