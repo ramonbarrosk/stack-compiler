@@ -1,12 +1,12 @@
 #include <string>
 #include <cstring>
 
-#include "../../bnf/keywords.h"
-#include "../../bnf/operators.h"
-#include "../../bnf/delimiters.h"
-#include "../../bnf/identifiers.h"
+#include "../../bnf/keywords.cpp"
+#include "../../bnf/operators.cpp"
+#include "../../bnf/delimiters.cpp"
 
 #include "../../bnf/types.h"
+
 #include "string-is-a-number.cpp"
 
 #pragma once
@@ -24,6 +24,13 @@ Token numberTokenObjectFactory(string word) {
     Token newToken;
     newToken.content = word;
     newToken.type = NUMBER;
+    return newToken;
+}
+
+Token identifierTokenObjectFactory(string word) {
+    Token newToken;
+    newToken.content = word;
+    newToken.type = IDENTIFIER;
     return newToken;
 }
 

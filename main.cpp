@@ -17,6 +17,13 @@ int main()
   string fileName = "example-file.txt";
   vector<string> fileInput = getFileInput(fileName);
 
-  lexicalAnalyzer(fileInput);
+  vector<Token> tokens = lexicalAnalyzer(fileInput);
+    for (Token token : tokens) {
+        if (token.content.compare("\n") == 0) {
+            cout << "< " << "LB" << ", " << token.type << " >" << endl;
+        } else {
+            cout << "< " << token.content << ", " << token.type << " >" << endl;
+        }
+    }
   return 0;
 }
