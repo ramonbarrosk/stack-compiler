@@ -16,7 +16,7 @@ using namespace std;
 vector<Token> lexicalAnalyzer(vector<string> script) {
     vector<string> commands = eat_first_blanks(script);
     commands = withdraw_spaces(commands);
-    commands = splitCommandsByDelimiter(commands, '\n');
+    commands = splitCommandsByDelimiter(commands, ' ');
     // criar automato ainda pqp (é necessário?);
     return lexicalAnalyzerAutomata(commands);
 }
