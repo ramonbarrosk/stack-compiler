@@ -7,34 +7,23 @@
 #include <fstream>
 
 // Functions
-#include "getFileInput.h"
+#include "getFileInput.cpp"
+#include "lexer/lexer.cpp"
 
 using namespace std;
 
 int main()
 {
-  // TODO: Get the fileName from the user in string format, following the standard: "name-of-file.txt"
   string fileName = "example-file.txt";
   vector<string> fileInput = getFileInput(fileName);
 
-  // TODO: Remove this example loop below:
-  for (int i = 0; i < fileInput.size(); i++)
-  {
-    cout << i << " " << fileInput[i] << '\n';
-  }
-
-  // TODO: Remove this example code below to print out individual letters:
-  /*
-  cout << "Printing out all individual letters: \n";
-  for (int j = 0; j < fileInput.size(); j++)
-  {
-    for (int k = 0; k < fileInput[j].size(); k++)
-    {
-      cout << fileInput[j][k] << ' ';
+  vector<Token> tokens = lexicalAnalyzer(fileInput);
+    for (Token token : tokens) {
+        if (token.content.compare("\n") == 0) {
+            cout << "< " << "LB" << ", " << token.type << " >" << endl;
+        } else {
+            cout << "< " << token.content << ", " << token.type << " >" << endl;
+        }
     }
-    cout << '\n';
-  }
-  */
-
   return 0;
 }
