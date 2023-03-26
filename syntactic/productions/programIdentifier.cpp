@@ -23,7 +23,7 @@ bool isProgramKeyword(vector<Token> tokens, int *currentToken)
     return false;
 }
 
-bool hasIdBeforeProgramKeyword(vector<Token> tokens, int *currentToken)
+bool hasIdAfterProgramKeyword(vector<Token> tokens, int *currentToken)
 {
     if (tokens[*currentToken].type.compare(IDENTIFIER) == 0)
     {
@@ -33,9 +33,15 @@ bool hasIdBeforeProgramKeyword(vector<Token> tokens, int *currentToken)
     return false;
 }
 
+bool hasDelimiterAfterProgramId(vector<Token> tokens, int *currentToken) {
+    return verify_content(tokens, currentToken, ";");
+}
+
 bool checkValidHeader(vector<Token> tokens, int *currentToken) {
     if (isProgramKeyword(tokens, currentToken)) {
-        return hasIdBeforeProgramKeyword(tokens, currentToken);
+        if (hasIdAfterProgramKeyword(tokens, currentToken)) {
+            return hasDelimiterAfterProgramId(tokens, currentToken);
+        }
     }
     return false;
 }
