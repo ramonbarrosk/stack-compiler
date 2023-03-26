@@ -1,2 +1,2 @@
 program exemplo1;
-var x:;
+var x: integer, p: pilha_of_real, t: real;
