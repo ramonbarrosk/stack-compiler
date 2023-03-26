@@ -30,7 +30,7 @@ vector<string> splitCommandsByDelimiter(vector<string> script, char delim)
                 string token;
                 for (char c : palavra)
                 {
-                    if (c == ';' || c == '(' || c == ')' || c == '[' || c == ']' || c == '#' || c == '{' || c == '}' || c == ',' || c == '.')
+                    if (c == ';' || c == '(' || c == ')' || c == '[' || c == ']' || c == '#' || c == '{' || c == '}' || c == ',' || c == '.' || c == ':')
                     {
                         // separa o caractere especial em um token separado
                         if (!token.empty())

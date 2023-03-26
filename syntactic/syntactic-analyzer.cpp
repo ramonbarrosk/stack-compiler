@@ -26,6 +26,9 @@ void syntacticAnalyzer(vector<Token> tokens) {
 
 bool startProgram(vector<Token> tokens, int* currentToken) {
     bool startProgram = programIdentifier(tokens, currentToken);
+    if (startProgram) {
+        body(tokens, currentToken);
+    }
     if (tokens[*currentToken].type.compare("END_PROGRAM") == 0) {
         return true;
     }

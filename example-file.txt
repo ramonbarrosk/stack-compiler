@@ -1,11 +1,2 @@
 program exemplo1;
-var x: integer;
-    p: pilha_of_real;
-begin
-    p := inverte(concatena(#1.221#,#3.4#));
-    for x := 1 to length(p) do
-    begin
-        write(p[x]);
-    end;
-    x := x + 1;
-end
+var x:;
