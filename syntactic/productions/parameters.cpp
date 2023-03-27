@@ -57,12 +57,13 @@ bool cont_lista_parametros(vector<Token> tokens, int *currentToken)
     {
         if (lista_parametros(tokens, currentToken))
         {
-            if (eat(tokens, currentToken))
+            if (!verify_content(tokens, currentToken, ";"))
                 return true;
         }
     }
     return true;
 }
+
 
 bool parameters(vector<Token> tokens, int *currentToken)
 {

@@ -7,5 +7,6 @@
 #include "./operation.cpp"
 #include "./sentences.cpp"
 #include "./parameters.cpp"
+#include "./function.cpp"
 
 #pragma once

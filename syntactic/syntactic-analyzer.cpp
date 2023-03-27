@@ -20,16 +20,16 @@ void syntacticAnalyzer(vector<Token> tokens) {
 
     tokens.push_back(token);
     bool validProgram = startProgram(tokens, &currentToken);
-
-    cout << "CurrentToken: " << currentToken << "\n";
 }
 
 bool startProgram(vector<Token> tokens, int* currentToken) {
     bool startProgram = programIdentifier(tokens, currentToken);
-    cout << "\nvalue: " << tokens[*currentToken].content << "\n";
     if (startProgram) {
         body(tokens, currentToken);
     }
+    cout << "\nvalue: " << tokens[*currentToken].content << "\n";
+    cout << "CurrentToken: " << *currentToken << "\n";
+
     if (tokens[*currentToken].type.compare("END_PROGRAM") == 0) {
         return true;
     }

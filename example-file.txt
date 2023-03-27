@@ -1,5 +1,5 @@
 program exemplo1;
-var1: integer; var2: integer;
+function teste()
 begin
     +(1,2);
     read(x);
