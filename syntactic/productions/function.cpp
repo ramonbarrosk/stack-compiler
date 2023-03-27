@@ -21,7 +21,6 @@ bool functionVerifier(vector<Token> tokens, int *currentToken)
         // que vai contabilizar os tokens dos parametros)
         if (parameters(tokens, currentToken))
         {
-            cout << *currentToken << "\n";
             return (verify_content(tokens, currentToken, ")"));
         }
         return (verify_content(tokens, currentToken, ")"));
