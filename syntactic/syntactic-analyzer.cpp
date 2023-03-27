@@ -26,6 +26,7 @@ void syntacticAnalyzer(vector<Token> tokens) {
 
 bool startProgram(vector<Token> tokens, int* currentToken) {
     bool startProgram = programIdentifier(tokens, currentToken);
+    cout << "\nvalue: " << tokens[*currentToken].content << "\n";
     if (startProgram) {
         body(tokens, currentToken);
     }

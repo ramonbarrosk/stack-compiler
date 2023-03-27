@@ -1,3 +1,2 @@
 program exemplo1;
-var x: integer,
-var p: ;
+begin end

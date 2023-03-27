@@ -25,3 +25,4 @@ bool body(vector<Token> tokens, int* currentToken);
 bool declaration(vector<Token> tokens, int* currentToken);
 bool checkVarDeclaration(vector<Token> tokens, int* currentToken);
 bool hasIdAfterVar(vector<Token> tokens, int* currentToken);
+bool isBeginAndEnd(vector<Token> tokens, int* currentToken);

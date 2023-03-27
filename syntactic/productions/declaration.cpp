@@ -33,7 +33,7 @@ bool hasTypeAfterId(vector<Token> tokens, int* currentToken) {
             return eat(tokens, currentToken);
         } else {
             string error = "Esperava-se uma tipagem (integer, pilha_of_real, pilha_of_integer, real) após a declaração da variável ";
-            string varError = error.append(tokens[*currentToken-2].content);
+            string varError = error.append(tokens[*currentToken-1].content);
             throw std::invalid_argument(varError);
         }
     } else {
