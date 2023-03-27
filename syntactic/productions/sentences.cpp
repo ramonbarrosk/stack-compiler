@@ -27,7 +27,7 @@ bool hasParameters(vector<Token> tokens, int *currentToken)
 
 bool varRead(vector<Token> tokens, int *currentToken)
 {
-    if (verify_content(tokens, currentToken, "var_read"))
+    if (verify_content(tokens, currentToken, "read"))
     {
         return hasParameters(tokens, currentToken);
     }
@@ -36,7 +36,7 @@ bool varRead(vector<Token> tokens, int *currentToken)
 
 bool varWrite(vector<Token> tokens, int *currentToken)
 {
-    if (verify_content(tokens, currentToken, "var_write"))
+    if (verify_content(tokens, currentToken, "write"))
     {
         return hasParameters(tokens, currentToken);
     }
