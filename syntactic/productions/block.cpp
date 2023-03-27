@@ -14,7 +14,7 @@ bool block(vector<Token> tokens, int *currentToken)
     {
         if (!verify_content(tokens, currentToken, "end"))
         {
-            verify_productions(tokens, currentToken, {operation, sentences});
+            verify_productions(tokens, currentToken, {operation, sentences, declaration});
         }
         else
         {
