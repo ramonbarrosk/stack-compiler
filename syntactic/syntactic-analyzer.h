@@ -36,3 +36,9 @@ bool operation(vector<Token> tokens, int* currentToken);
 bool varRead(vector<Token> tokens, int *currentToken);
 bool varWrite(vector<Token> tokens, int *currentToken);
 bool sentences(vector<Token> tokens, int *currentToken);
+
+// função/rotina
+bool parameters(vector<Token> tokens, int *currentToken);
+bool lista_id(vector<Token> tokens, int *currentToken);
+bool cont_lista_id(vector<Token> tokens, int *currentToken);
+bool cont_lista_parametros(vector<Token> tokens, int *currentToken);
