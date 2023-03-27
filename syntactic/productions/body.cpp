@@ -9,7 +9,7 @@
 #include "../utils/verify-productions.cpp"
 
 bool body(vector<Token> tokens, int* currentToken) {
-    return verify_productions(tokens, currentToken, {declaration, isBeginAndEnd});
+    return verify_productions(tokens, currentToken, {isBeginAndEnd});
 }
 // o return do body vai ficar mais ou menos assim:
 // return verify_productions(tokens, currentToken, {declaration, routines, begin&end}); 

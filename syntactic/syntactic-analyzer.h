@@ -25,4 +25,14 @@ bool body(vector<Token> tokens, int* currentToken);
 bool declaration(vector<Token> tokens, int* currentToken);
 bool checkVarDeclaration(vector<Token> tokens, int* currentToken);
 bool hasIdAfterVar(vector<Token> tokens, int* currentToken);
+
+// blocos de código
 bool isBeginAndEnd(vector<Token> tokens, int* currentToken);
+bool block(vector<Token> tokens, int* currentToken);
+
+bool operation(vector<Token> tokens, int* currentToken);
+
+// sentenças
+bool varRead(vector<Token> tokens, int *currentToken);
+bool varWrite(vector<Token> tokens, int *currentToken);
+bool sentences(vector<Token> tokens, int *currentToken);

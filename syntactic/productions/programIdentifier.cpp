@@ -7,7 +7,6 @@
 #include "../syntactic-analyzer.h"
 #include "../utils/eat.cpp"
 #include "../utils/verify-productions.cpp"
-// include "./index.cpp"
 
 #pragma once
 

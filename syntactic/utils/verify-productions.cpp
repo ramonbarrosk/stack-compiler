@@ -6,7 +6,6 @@ bool verify_productions(vector<Token> tokens, int *currentToken, vector<bool (*)
 
     for (auto && fn : productions) {
         if (fn(tokens, currentToken)) {
-            cout << fn;
             return true;
         } else {
             *currentToken = pastToken;
