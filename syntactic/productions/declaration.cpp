@@ -9,7 +9,6 @@
 #include "../utils/eat.cpp"
 #include "../utils/verify-productions.cpp"
 
-regex types ("integer|pilha_of_real|pilha_of_integer|real");
 
 bool checkVarDeclaration(vector<Token> tokens, int* currentToken) {
     if (verify_content(tokens, currentToken, "var")) {
@@ -37,15 +36,16 @@ bool hasTypeAfterId(vector<Token> tokens, int* currentToken) {
             throw std::invalid_argument(varError);
         }
     } else {
-        string error = "Esperava o caractere : após a variável ";
-        string varError = error.append(tokens[*currentToken].content);
-        throw std::invalid_argument(varError);
+        // string error = "Esperava o caractere : após a variável ";
+        // string varError = error.append(tokens[*currentToken].content);
+        // throw std::invalid_argument(varError);
     }
     return false;
 }
 
 bool hasMoreIds(vector<Token> tokens, int* currentToken) {
     // verifica se há mais identificadores a serem declarados
+    
     while (hasIdAfterVar(tokens, currentToken)) {
         if (!hasTypeAfterId(tokens, currentToken)) {
             return false;
@@ -59,5 +59,5 @@ bool hasMoreIds(vector<Token> tokens, int* currentToken) {
 }
 
 bool declaration(vector<Token> tokens, int* currentToken) {
-    return verify_productions(tokens, currentToken, {hasMoreIds});
+    return verify_productions(tokens, currentToken, {checkVarDeclaration, hasMoreIds});
 }

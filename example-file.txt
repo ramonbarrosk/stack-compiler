@@ -1,10 +1,12 @@
 program exemplo1;
+procedure teste2();
+begin
+end;
 function teste(var oi: integer): integer; 
 begin
     +(1,2);
     read(x);
     write(x);
-    var x: integer;
 end
 begin
  write(x); 

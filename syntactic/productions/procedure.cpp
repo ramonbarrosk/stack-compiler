@@ -9,16 +9,12 @@
 #include "../utils/eat.cpp"
 #include "../utils/verify-productions.cpp"
 
-string error;
-string funcError;
-
 bool procedureVerifier(vector<Token> tokens, int *currentToken)
 {
     if (!isAProcedure(tokens, currentToken))
     {
         return false;
     }
-
     // procedimento tem parametros (necessário pois irá executar a função
     // que vai contabilizar os tokens dos parametros)
     if (verify_content(tokens, currentToken, "("))
@@ -27,41 +23,13 @@ bool procedureVerifier(vector<Token> tokens, int *currentToken)
         {
             if (verify_content(tokens, currentToken, ")"))
             {
-                if (verify_content(tokens, currentToken, ";"))
-                {
-                    if (block(tokens, currentToken))
-                    {
-                        if (verify_content(tokens, currentToken, ";"))
-                        {
-                            return true;
-                        }
-
-                        else
-                        {
-                            error = "Bloco do procedimento mal escrito";
-                            funcError = error.append(tokens[*currentToken - 2].content);
-                            throw std::invalid_argument(funcError);
-                        }
-                    }
-                }
+                return block(tokens, currentToken);
             }
         }
         // sem parametros
         else
         {
-            if (block(tokens, currentToken))
-            {
-                if (verify_content(tokens, currentToken, ";"))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                error = "Erro de bloco";
-                funcError = error.append(tokens[*currentToken - 2].content);
-                throw std::invalid_argument(funcError);
-            }
+            return block(tokens, currentToken);
         }
     }
     return false;
@@ -69,6 +37,8 @@ bool procedureVerifier(vector<Token> tokens, int *currentToken)
 
 bool isAProcedure(vector<Token> tokens, int *currentToken)
 {
+    cout << "oi";
+    cout << tokens[*currentToken].content  << "\n";
     if (verify_content(tokens, currentToken, "procedure"))
     {
         if (identifier(tokens, currentToken))
@@ -79,7 +49,7 @@ bool isAProcedure(vector<Token> tokens, int *currentToken)
     return false;
 }
 
-bool bnffunction(vector<Token> tokens, int *currentToken)
+bool bnfProcedure(vector<Token> tokens, int *currentToken)
 {
     return verify_productions(tokens, currentToken, {procedureVerifier});
 }

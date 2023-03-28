@@ -9,9 +9,6 @@
 #include "../utils/eat.cpp"
 #include "../utils/verify-productions.cpp"
 
-string error;
-string funcError;
-
 bool hasTypeAndBlockInsideTheFunction(vector<Token> tokens, int *currentToken)
 {
     if (verify_content(tokens, currentToken, ":"))

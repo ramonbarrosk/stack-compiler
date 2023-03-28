@@ -8,6 +8,12 @@
 
 using namespace std;
 
+string error;
+string funcError;
+
+regex types ("integer|pilha_of_real|pilha_of_integer|real");
+
+
 void syntacticAnalyzer(vector<Token> tokens);
 
 bool startProgram(vector<Token> tokens, int* currentToken);
@@ -43,6 +49,12 @@ bool lista_id(vector<Token> tokens, int *currentToken);
 bool cont_lista_id(vector<Token> tokens, int *currentToken);
 bool cont_lista_parametros(vector<Token> tokens, int *currentToken);
 bool functionVerifier(vector<Token> tokens, int *currentToken);
+
 bool isAFunction(vector<Token> tokens, int *currentToken);
+bool isAProcedure(vector<Token> tokens, int *currentToken);
+
+bool bnfProcedure(vector<Token> tokens, int *currentToken);
 bool bnffunction(vector<Token> tokens, int *currentToken);
+
 bool callProcedure(vector<Token> tokens, int *currentToken);
+bool routines(vector<Token> tokens, int *currentToken);
