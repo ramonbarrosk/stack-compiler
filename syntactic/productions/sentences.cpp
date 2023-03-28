@@ -85,7 +85,7 @@ bool repeatUntilSentence(vector<Token> tokens, int *currentToken)
 {
     if (verify_content(tokens, currentToken, "repeat"))
     {
-        if (sentences(tokens, currentToken))
+        if (sentences(tokens, currentToken) || callProcedure(tokens, currentToken) || operation(tokens, currentToken))
         {
             if (verify_content(tokens, currentToken, "until"))
             {

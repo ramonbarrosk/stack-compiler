@@ -11,7 +11,7 @@
 bool procedureParameter(vector<Token> tokens, int *currentToken)
 {
     int initialToken = *currentToken;
-    if (regex_match(tokens[*currentToken].content, functionTypes))
+    if (regex_match(tokens[*currentToken].content, types))
     {
         if (identifier(tokens, currentToken))
         {
@@ -48,7 +48,7 @@ bool callProcedureProduction(vector<Token> tokens, int *currentToken)
             }
             else {
                 if (verify_content(tokens, currentToken, ")")) {
-                    if (eat(tokens, currentToken)) return true;
+                    return true;
                 }
             }
         }
