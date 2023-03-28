@@ -6,3 +6,7 @@ begin
     write(x);
     var x: integer;
 end
+
+begin
+ write(x); 
+end
