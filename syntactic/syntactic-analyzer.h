@@ -58,3 +58,11 @@ bool bnffunction(vector<Token> tokens, int *currentToken);
 
 bool callProcedure(vector<Token> tokens, int *currentToken);
 bool routines(vector<Token> tokens, int *currentToken);
+
+// argumentos 
+bool args(vector<Token> tokens, int *currentToken);
+bool argumentos(vector<Token> tokens, int *currentToken);
+bool lista_arg(vector<Token> tokens, int *currentToken);
+bool cont_lista_arg(vector<Token> tokens, int *currentToken);
+
+bool expr(vector<Token> tokens, int *currentToken);

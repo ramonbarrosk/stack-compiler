@@ -10,4 +10,6 @@ begin
  if (>(2,10)) then begin end
  write(x); 
  teste();
+ fatorial(5);
+ write()
 end

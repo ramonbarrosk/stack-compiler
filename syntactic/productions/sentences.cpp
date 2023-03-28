@@ -60,6 +60,17 @@ bool ifSentence(vector<Token> tokens, int *currentToken)
     return false;
 }
 
+bool forSentence(vector<Token> tokens, int *currentToken) {
+    if (verify_content(tokens, currentToken, "for")) {
+        if (identifier(tokens, currentToken)) {
+            if (verify_content(tokens, currentToken, "for")) {
+
+            }
+        }
+    }
+    return false;
+}
+
 bool sentences(vector<Token> tokens, int *currentToken)
 {
     return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence});
