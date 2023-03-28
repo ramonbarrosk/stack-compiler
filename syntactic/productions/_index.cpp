@@ -8,5 +8,6 @@
 #include "./sentences.cpp"
 #include "./parameters.cpp"
 #include "./function.cpp"
+#include "./callFunction.cpp"
 
 #pragma once

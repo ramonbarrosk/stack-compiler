@@ -1,5 +1,4 @@
 program exemplo1;
-
 function teste(var oi: integer): integer; 
 begin
     +(1,2);
@@ -9,4 +8,5 @@ begin
 end
 begin
  write(x); 
+ teste();
 end

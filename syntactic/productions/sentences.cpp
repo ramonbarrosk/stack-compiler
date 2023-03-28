@@ -46,5 +46,5 @@ bool varWrite(vector<Token> tokens, int *currentToken)
 
 bool sentences(vector<Token> tokens, int *currentToken)
 {
-    return verify_productions(tokens, currentToken, {varRead, varWrite});
+    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite});
 }
