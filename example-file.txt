@@ -11,5 +11,5 @@ begin
  write(x); 
  teste();
  for id 1 to 10 do begin end;
- repeat write(x) until >(1, 10);
+ while(>(2,1)) do begin end;
 end

@@ -124,14 +124,40 @@ bool forSentence(vector<Token> tokens, int *currentToken)
                 }
             }
         }
-        else
+    }
+    return false;
+}
+
+bool whileSentence(vector<Token> tokens, int *currentToken)
+{
+    if (verify_content(tokens, currentToken, "while"))
+    {
+        if (verify_content(tokens, currentToken, "("))
         {
+            if (!relation(tokens, currentToken))
+            {
+                error = "Erro na condição do while";
+                throw std::invalid_argument(error);
+            }
+            if (!verify_content(tokens, currentToken, ")"))
+            {
+                error = "Esperava-se um fecha parêntese após a condição do while";
+                throw std::invalid_argument(error);
+            }
+            if (!verify_content(tokens, currentToken, "do"))
+            {
+                error = "Esperava-se a palavra 'do' após a condição do while";
+                throw std::invalid_argument(error);
+            }
+            return block(tokens, currentToken);
         }
+        error = "Esperava-se um abre parêntese após o while";
+        throw std::invalid_argument(error);
     }
     return false;
 }
 
 bool sentences(vector<Token> tokens, int *currentToken)
 {
-    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence, forSentence, repeatUntilSentence});
+    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence, forSentence, repeatUntilSentence, whileSentence});
 }
