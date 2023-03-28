@@ -9,6 +9,9 @@
 #include "../utils/eat.cpp"
 #include "../utils/verify-productions.cpp"
 
+string error;
+string funcError;
+
 bool hasTypeAndBlockInsideTheFunction(vector<Token> tokens, int *currentToken)
 {
     if (verify_content(tokens, currentToken, ":"))
@@ -20,15 +23,15 @@ bool hasTypeAndBlockInsideTheFunction(vector<Token> tokens, int *currentToken)
         }
         else
         {
-            string error = "Esperava-se uma tipagem (integer, pilha_of_real, pilha_of_integer, real) após os parênteses da função ";
-            string funcError = error.append(tokens[*currentToken - 2].content);
+            error = "Esperava-se uma tipagem (integer, pilha_of_real, pilha_of_integer, real) após os parênteses da função ";
+            funcError = error.append(tokens[*currentToken - 2].content);
             throw std::invalid_argument(funcError);
         }
     }
     else
     {
-        string error = "Esperava o caractere : após os parênteses da função ";
-        string funcError = error.append(tokens[*currentToken - 2].content);
+        error = "Esperava o caractere : após os parênteses da função ";
+        funcError = error.append(tokens[*currentToken - 2].content);
         throw std::invalid_argument(funcError);
     }
     return false;
@@ -53,8 +56,8 @@ bool functionVerifier(vector<Token> tokens, int *currentToken)
             }
             else
             {
-                string error = "Esperava-se um parêntese fechado após os parâmetros da função ";
-                string funcError = error.append(tokens[*currentToken - 3].content);
+                error = "Esperava-se um parêntese fechado após os parâmetros da função ";
+                funcError = error.append(tokens[*currentToken - 3].content);
                 throw std::invalid_argument(funcError);
             }
         }
@@ -67,8 +70,8 @@ bool functionVerifier(vector<Token> tokens, int *currentToken)
             }
             else
             {
-                string error = "Esperava-se um parêntese fechado após os parâmetros da função ";
-                string funcError = error.append(tokens[*currentToken - 2].content);
+                error = "Esperava-se um parêntese fechado após os parâmetros da função ";
+                funcError = error.append(tokens[*currentToken - 2].content);
                 throw std::invalid_argument(funcError);
             }
         }
