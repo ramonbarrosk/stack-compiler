@@ -93,7 +93,7 @@ bool repeatUntilSentence(vector<Token> tokens, int *currentToken)
             }
         }
         else
-        {
+        {   error = "Era esperado uma expressão após o repeat";
             throw std::invalid_argument(error);
         }
     }

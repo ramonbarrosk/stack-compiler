@@ -4,8 +4,8 @@ begin
     if (>(2,10)) then begin end;
     +(1,2);
     read(x);
-    write(x);
-    var x: integer;
+    write(y);
+    var novaVar: integer;
 end
 begin
  write(x); 
