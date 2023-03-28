@@ -10,5 +10,9 @@
 #include "./function.cpp"
 #include "./callFunction.cpp"
 #include "./procedure.cpp"
+#include "./relation.cpp"
+
+
+
 
 #pragma once

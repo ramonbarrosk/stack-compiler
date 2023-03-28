@@ -37,8 +37,6 @@ bool procedureVerifier(vector<Token> tokens, int *currentToken)
 
 bool isAProcedure(vector<Token> tokens, int *currentToken)
 {
-    cout << "oi";
-    cout << tokens[*currentToken].content  << "\n";
     if (verify_content(tokens, currentToken, "procedure"))
     {
         if (identifier(tokens, currentToken))

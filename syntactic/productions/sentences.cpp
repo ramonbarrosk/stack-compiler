@@ -44,7 +44,23 @@ bool varWrite(vector<Token> tokens, int *currentToken)
     return false;
 }
 
+bool ifSentence(vector<Token> tokens, int *currentToken)
+{
+    if (verify_content(tokens, currentToken, "if")) {
+        if (verify_content(tokens, currentToken, "(")) {
+            if (relation(tokens, currentToken)) {
+                if (verify_content(tokens, currentToken, ")")) {
+                    if (verify_content(tokens, currentToken, "then")) {
+                        return block(tokens, currentToken);
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 bool sentences(vector<Token> tokens, int *currentToken)
 {
-    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite});
+    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence});
 }
