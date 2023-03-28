@@ -13,8 +13,7 @@
 #include "./relation.cpp"
 #include "./args.cpp"
 #include "./expr.cpp"
-
-
+#include "./stack.cpp"
 
 
 #pragma once

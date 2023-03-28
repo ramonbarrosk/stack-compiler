@@ -47,7 +47,7 @@ void scope_type(vector<Token> tokens, vector<Scope> keywords, stack<Scope> *esco
     {
         if (tokens[*i].content.compare(key.name) == 0)
         {
-            if (key.name.compare("function") == 0 || (key.name.compare("class") == 0))
+            if (key.name.compare("function") == 0)
             {
                 escopos->push({tokens[*i + 1].content, key.type});
                 *i = *i + 2;

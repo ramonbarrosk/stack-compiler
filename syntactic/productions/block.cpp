@@ -14,7 +14,7 @@ bool block(vector<Token> tokens, int *currentToken)
     {
         if (!verify_content(tokens, currentToken, "end"))
         {
-            verify_productions(tokens, currentToken, {operation, sentences, declaration, bnfProcedure, bnffunction, isBeginAndEnd, callProcedure});
+            verify_productions(tokens, currentToken, {stackProduction, operation, sentences, declaration, bnfProcedure, bnffunction, isBeginAndEnd, callProcedure});
         }
         else
         {
