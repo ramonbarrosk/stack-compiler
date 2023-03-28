@@ -45,3 +45,4 @@ bool cont_lista_parametros(vector<Token> tokens, int *currentToken);
 bool functionVerifier(vector<Token> tokens, int *currentToken);
 bool isAFunction(vector<Token> tokens, int *currentToken);
 bool bnffunction(vector<Token> tokens, int *currentToken);
+bool verifyHasFunctionReturnType(vector<Token> tokens, int *currentToken);

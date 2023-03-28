@@ -36,6 +36,7 @@ bool lista_id(vector<Token> tokens, int *currentToken)
 
 bool lista_parametros(vector<Token> tokens, int *currentToken)
 {
+    eat(tokens, currentToken);
     if (lista_id(tokens, currentToken))
     {
         if (verify_content(tokens, currentToken, ":"))

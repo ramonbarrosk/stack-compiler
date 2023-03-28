@@ -19,6 +19,5 @@ bool checkBeginEnd(vector<Token> tokens, int* currentToken) {
 }
 
 bool isBeginAndEnd(vector<Token> tokens, int* currentToken) {
-    cout << "\n" << *currentToken << " ola\n";
     return verify_productions(tokens, currentToken, {checkBeginEnd});
 }

@@ -9,6 +9,7 @@
 #include "../utils/verify-productions.cpp"
 #include "../../bnf/operators.h"
 
+// esse hasParameters verifica só se tem um identificador dentro dos parenteses. tipo: write(x)
 bool hasParameters(vector<Token> tokens, int *currentToken)
 {
     if (verify_content(tokens, currentToken, "("))

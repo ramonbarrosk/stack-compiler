@@ -1,5 +1,5 @@
 program exemplo1;
-function teste()
+function teste(var oi: integer): integer;
 begin
     +(1,2);
     read(x);
