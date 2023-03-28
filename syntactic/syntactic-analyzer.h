@@ -67,3 +67,4 @@ bool lista_arg(vector<Token> tokens, int *currentToken);
 bool cont_lista_arg(vector<Token> tokens, int *currentToken);
 
 bool expr(vector<Token> tokens, int *currentToken);
+bool termo(vector<Token> tokens, int *currentToken);

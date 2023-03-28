@@ -81,6 +81,25 @@ bool ifSentence(vector<Token> tokens, int *currentToken)
     return false;
 }
 
+bool repeatUntilSentence(vector<Token> tokens, int *currentToken)
+{
+    if (verify_content(tokens, currentToken, "repeat"))
+    {
+        if (sentences(tokens, currentToken))
+        {
+            if (verify_content(tokens, currentToken, "until"))
+            {
+                return relation(tokens, currentToken);
+            }
+        }
+        else
+        {
+            throw std::invalid_argument(error);
+        }
+    }
+    return false;
+}
+
 bool forSentence(vector<Token> tokens, int *currentToken)
 // gambiarra da peste KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
 {
@@ -114,5 +133,5 @@ bool forSentence(vector<Token> tokens, int *currentToken)
 
 bool sentences(vector<Token> tokens, int *currentToken)
 {
-    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence, forSentence});
+    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence, forSentence, repeatUntilSentence});
 }
