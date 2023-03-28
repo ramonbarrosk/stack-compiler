@@ -12,20 +12,28 @@
 // esse hasParameters verifica só se tem um identificador dentro dos parenteses. tipo: write(x)
 bool hasParameters(vector<Token> tokens, int *currentToken)
 {
-    if (verify_content(tokens, currentToken, "("))
+    if (!verify_content(tokens, currentToken, "("))
     {
-        if (identifier(tokens, currentToken))
-        {
-            if (verify_content(tokens, currentToken, ")"))
-            {
-                if (eat(tokens, currentToken))
-                    return true;
-            }
-        }
+        error = "Esperava-se um abre parêntese no início dos parâmetros";
+        throw std::invalid_argument(funcError);
     }
-    return false;
+    if (!identifier(tokens, currentToken))
+    {
+        error = "Esperava-se um identificador para o nome do parâmetro";
+        throw std::invalid_argument(funcError);
+    }
+    if (!verify_content(tokens, currentToken, ")"))
+    {
+        error = "Esperava-se um fecha parêntese no final dos parâmetros";
+        throw std::invalid_argument(funcError);
+    }
+    if (!eat(tokens, currentToken))
+    {
+        error = "Erro ao consumir token de fechamento de parâmetros";
+        throw std::invalid_argument(funcError);
+    }
+    return true;
 }
-
 bool varRead(vector<Token> tokens, int *currentToken)
 {
     if (verify_content(tokens, currentToken, "read"))
@@ -46,26 +54,59 @@ bool varWrite(vector<Token> tokens, int *currentToken)
 
 bool ifSentence(vector<Token> tokens, int *currentToken)
 {
-    if (verify_content(tokens, currentToken, "if")) {
-        if (verify_content(tokens, currentToken, "(")) {
-            if (relation(tokens, currentToken)) {
-                if (verify_content(tokens, currentToken, ")")) {
-                    if (verify_content(tokens, currentToken, "then")) {
-                        return block(tokens, currentToken);
-                    }
-                }
+    if (verify_content(tokens, currentToken, "if"))
+    {
+        if (verify_content(tokens, currentToken, "("))
+        {
+            if (!relation(tokens, currentToken))
+            {
+                error = "Erro na condição do if";
+                throw std::invalid_argument(error);
             }
+            if (!verify_content(tokens, currentToken, ")"))
+            {
+                error = "Esperava-se um fecha parêntese após a condição do if";
+                throw std::invalid_argument(error);
+            }
+            if (!verify_content(tokens, currentToken, "then"))
+            {
+                error = "Esperava-se a palavra 'then' após a condição do if";
+                throw std::invalid_argument(error);
+            }
+            return block(tokens, currentToken);
         }
+        error = "Esperava-se um abre parêntese após o if";
+        throw std::invalid_argument(error);
     }
     return false;
 }
 
-bool forSentence(vector<Token> tokens, int *currentToken) {
-    if (verify_content(tokens, currentToken, "for")) {
-        if (identifier(tokens, currentToken)) {
-            if (verify_content(tokens, currentToken, "for")) {
-
+bool forSentence(vector<Token> tokens, int *currentToken)
+// gambiarra da peste KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+{
+    if (verify_content(tokens, currentToken, "for"))
+    {
+        if (identifier(tokens, currentToken))
+        {
+            if (tokens[*currentToken].type.compare("NUMBER") == 0)
+            {
+                eat(tokens, currentToken);
+                if (tokens[*currentToken].content.compare("to") == 0)
+                {
+                    eat(tokens, currentToken);
+                    if (isdigit(tokens[*currentToken].content[0]))
+                    {
+                        eat(tokens, currentToken);
+                        if (verify_content(tokens, currentToken, "do"))
+                        {
+                            return block(tokens, currentToken);
+                        }
+                    }
+                }
             }
+        }
+        else
+        {
         }
     }
     return false;
@@ -73,5 +114,5 @@ bool forSentence(vector<Token> tokens, int *currentToken) {
 
 bool sentences(vector<Token> tokens, int *currentToken)
 {
-    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence});
+    return verify_productions(tokens, currentToken, {callProcedure, varRead, varWrite, ifSentence, forSentence});
 }

@@ -1,15 +1,14 @@
 program exemplo1;
 function teste(var oi: integer): integer; 
 begin
+    if (>(2,10)) then begin end;
     +(1,2);
     read(x);
     write(x);
     var x: integer;
 end
 begin
- if (>(2,10)) then begin end
  write(x); 
  teste();
- fatorial(5);
- write()
+ for id 1 to 10 do begin end
 end

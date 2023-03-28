@@ -12,6 +12,7 @@ string error;
 string funcError;
 
 regex types ("integer|pilha_of_real|pilha_of_integer|real");
+regex ops (":=");
 
 
 void syntacticAnalyzer(vector<Token> tokens);
