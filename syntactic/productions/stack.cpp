@@ -25,7 +25,6 @@ bool integerNumCont(vector<Token> tokens, int *currentToken)
         }
         else
         {
-            cout << tokens[*currentToken].content;
             if (verify_content(tokens, currentToken, "#"))
             {
                 return true;
@@ -79,6 +78,42 @@ bool expressaoPilha(vector<Token> tokens, int *currentToken)
                 else
                 {
                     error = "Era esperado um )";
+                    throw std::invalid_argument(error);
+                }
+            }
+            else
+            {
+                error = "Era esperado um conteúdo válido";
+                throw std::invalid_argument(error);
+            }
+        }
+    }
+    else if (verify_content(tokens, currentToken, "concatena"))
+    {
+        if (verify_content(tokens, currentToken, "("))
+        {
+            if (conteudo(tokens, currentToken))
+            {
+
+                if (verify_content(tokens, currentToken, ","))
+                {
+                    if (conteudo(tokens, currentToken))
+                    {
+                        if (verify_content(tokens, currentToken, ")"))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            error = "Era esperado um )";
+                            throw std::invalid_argument(error);
+                        }
+                    }
+                    error = "Era esperado  uma outra operação de pilha";
+                    throw std::invalid_argument(error);
+                }
+                else {
+                    error = "O operador \"concatena\" deve receber dois parametros.";
                     throw std::invalid_argument(error);
                 }
             }

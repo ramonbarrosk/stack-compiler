@@ -30,8 +30,8 @@ bool startProgram(vector<Token> tokens, int *currentToken)
     {
         fez_o_sintatico_meu_deus = body(tokens, currentToken);
     }
-    // cout << "\nvalue: " << tokens[*currentToken].content << "\n";
-    // cout << "CurrentToken: " << *currentToken << "\n";
+    cout << "\nvalue: " << tokens[*currentToken].content << "\n";
+    cout << "CurrentToken: " << *currentToken << "\n";
     if (fez_o_sintatico_meu_deus)
     {
         vector<var_scope> tabela = tabela_de_simbolos(tokens);

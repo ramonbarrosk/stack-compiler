@@ -19,13 +19,13 @@ int main()
   vector<string> fileInput = getFileInput(fileName);
 
   vector<Token> tokens = lexicalAnalyzer(fileInput);
-    // for (Token token : tokens) {
-    //     if (token.content.compare("\n") == 0) {
-    //         cout << token.type << ": " << endl;
-    //     } else {
-    //         cout << token.content << " : " << token.type << endl;
-    //     }
-    // }
+  for (Token token : tokens) {
+      if (token.content.compare("\n") == 0) {
+          cout << token.type << ": " << endl;
+      } else {
+          cout << token.content << " : " << token.type << endl;
+      }
+  }
   cout << "\n";
   syntacticAnalyzer(tokens);
   return 0;
