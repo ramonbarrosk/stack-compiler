@@ -27,7 +27,7 @@ bool functionVerifier(vector<Token> tokens, int *currentToken)
                 if (verify_content(tokens, currentToken, ":")) {
                     // verifica se há uma tipagem após o caractere :
                     if (regex_match(tokens[*currentToken].content, regex("integer|pilha_of_real|pilha_of_integer|real"))) {
-                        eat(tokens, currentToken);
+                        return block(tokens, currentToken);
                     } else {
                         string error = "Esperava-se uma tipagem (integer, pilha_of_real, pilha_of_integer, real) após os parênteses da função ";
                         string funcError = error.append(tokens[*currentToken-2].content);
