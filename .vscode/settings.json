@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.tsx": "typescriptreact",
         "ostream": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
@@ -58,7 +59,12 @@
         "deque": "cpp",
         "ranges": "cpp",
         "span": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "xhash": "cpp",
+        "set": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

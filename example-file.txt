@@ -1,17 +1,11 @@
 program exemplo1;
-var declaracionisssss: integer;
-function teste(var oi: integer): integer; 
+var x: integer;
+    p: pilha_of_real;
 begin
-    inverte(#1#);
-    concatena(#1,2#,##);
-    +(1,2);
-    read(a);
-    write(y);
-    if (>(2,10)) then begin var novaVar: integer; end;
-end
-begin
-    write(x); 
-    teste();
-    repeat +(1,2) until >(2,1)
-    while (>(2,1)) do begin end;
+    p := inverte(concatena(#1.221#,#3.4#));
+    for x := 1 to length(p) do
+    begin
+        write(p[x]);
+    end;
+    x := x + 1;
 end
