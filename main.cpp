@@ -63,7 +63,8 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
             }
             declaredVariables[currentScope].insert(token.first);
             scopeTypeMap[currentScope][token.first] = currentType;
-            if (declaringFunction) functionParameters.insert(token.first);
+            if (declaringFunction)
+                functionParameters.insert(token.first);
         }
         else if (token.second == "IDENTIFIER" && !declaring)
         {
@@ -117,10 +118,70 @@ bool checkReservedIdentifierMisuse(const std::vector<std::pair<std::string, std:
     return true;
 }
 
-int main() {
+bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::string>> &tokens)
+{
+    std::unordered_set<std::string> declaredVariables;
+    std::unordered_set<std::string> undeclaredVariables;
+
+    bool declaring = false;
+    bool declaringFunction = false;
+
+    for (const auto &token : tokens)
+    {
+        if (token.first == "var")
+        {
+            declaring = true;
+        }
+        else if (token.first == ";")
+        {
+            declaring = false;
+        }
+        else if (token.first == "function" || token.first == "procedure")
+        {
+            declaringFunction = true;
+        }
+        else if (token.first == "(")
+        {
+            declaring = true;
+        }
+        else if (token.first == ")")
+        {
+            declaringFunction = false;
+            declaring = false;
+        }
+        else if (declaring && token.second == "IDENTIFIER")
+        {
+            declaredVariables.insert(token.first);
+        }
+        else if (!declaringFunction && token.second == "IDENTIFIER" && !declaring && declaredVariables.count(token.first) == 0)
+        {
+            undeclaredVariables.insert(token.first);
+        }
+    }
+
+    // Printa se tiver
+    if (!undeclaredVariables.empty())
+    {
+        std::cout << "Identificadores não declarados:\n";
+        for (const auto &var : undeclaredVariables)
+        {
+            std::cout << var << std::endl;
+        }
+        return true;
+    }
+    else
+    {
+        std::cout << "Identificadores estão okay.\n";
+    }
+
+    return false;
+}
+
+int main()
+{
     std::vector<std::pair<std::string, std::string>> tokens = {
         {"var", "KEYWORD"},
-        {"real", "IDENTIFIER"},
+        {"teste", "IDENTIFIER"},
         {":", "DELIMITER"},
         {"integer", "KEYWORD"},
         {";", "DELIMITER"},
@@ -144,6 +205,12 @@ int main() {
         {"ia", "IDENTIFIER"},
         {"integer", "KEYWORD"},
         {";", "DELIMITER"},
+        {"teste", "IDENTIFIER"},
+        {"=", "DELIMITER"},
+        {"teste", "IDENTIFIER"},
+        {"*", "DELIMITER"},
+        {"ib", "IDENTIFIER"},
+        {";", "DELIMITER"},
         {"end", "KEYWORD"},
         {";", "DELIMITER"},
     };
@@ -154,8 +221,9 @@ int main() {
         std::cout << "Nenhum erro encontrado.\n";
     else
         std::cout << "Erro encontrado.\n";
-    
+
     checkReservedIdentifierMisuse(tokens);
+    computeUndeclaredVariables(tokens);
 
     return 0;
 }
