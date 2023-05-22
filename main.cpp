@@ -74,7 +74,7 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
                 return false;
             }
         }
-        else if (token.second == "OPERATOR" && token.first == ":=")
+         else if (token.second == "OPERATOR" && token.first == ":=")
         {
             if (i > 0 && i + 1 < tokens.size())
             {
@@ -224,6 +224,65 @@ bool checkParameterMismatch(const std::vector<std::pair<std::string, std::string
     return true;
 }
 
+bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::string>> &tokens)
+{
+    std::unordered_set<std::string> declaredVariables;
+    std::unordered_set<std::string> undeclaredVariables;
+
+    bool declaring = false;
+    bool declaringFunction = false;
+
+    for (const auto &token : tokens)
+    {
+        if (token.first == "var")
+        {
+            declaring = true;
+        }
+        else if (token.first == ";")
+        {
+            declaring = false;
+        }
+        else if (token.first == "function" || token.first == "procedure")
+        {
+            declaringFunction = true;
+        }
+        else if (token.first == "(")
+        {
+            declaring = true;
+        }
+        else if (token.first == ")")
+        {
+            declaringFunction = false;
+            declaring = false;
+        }
+        else if (declaring && token.second == "IDENTIFIER")
+        {
+            declaredVariables.insert(token.first);
+        }
+        else if (!declaringFunction && token.second == "IDENTIFIER" && !declaring && declaredVariables.count(token.first) == 0)
+        {
+            undeclaredVariables.insert(token.first);
+        }
+    }
+
+    // Printa se tiver
+    if (!undeclaredVariables.empty())
+    {
+        std::cout << "Identificadores não declarados:\n";
+        for (const auto &var : undeclaredVariables)
+        {
+            std::cout << var << std::endl;
+        }
+        return true;
+    }
+    else
+    {
+        std::cout << "Identificadores estão okay.\n";
+    }
+
+    return false;
+}
+
 
 int main()
 {
@@ -251,6 +310,7 @@ int main()
         {"begin", "KEYWORD"},
         {"var", "KEYWORD"},
         {"ia", "IDENTIFIER"},
+        {":", "DELIMITER"},
         {"integer", "KEYWORD"},
         {";", "DELIMITER"},
         {"end", "KEYWORD"},
@@ -267,6 +327,7 @@ int main()
     checkReservedIdentifierMisuse(tokens);
     checkFunctionExistence(tokens);
     checkParameterMismatch(tokens);
+    computeUndeclaredVariables(tokens);
 
     return 0;
 }
