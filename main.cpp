@@ -118,70 +118,110 @@ bool checkReservedIdentifierMisuse(const std::vector<std::pair<std::string, std:
     return true;
 }
 
-bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::string>> &tokens)
+// Adicione à sua lista de tipos de identificador
+enum IdentifierType
 {
-    std::unordered_set<std::string> declaredVariables;
-    std::unordered_set<std::string> undeclaredVariables;
+    VARIABLE,
+    FUNCTION
+};
 
-    bool declaring = false;
-    bool declaringFunction = false;
+// Função para verificar a existência de funções
+bool checkFunctionExistence(const std::vector<std::pair<std::string, std::string>> &tokens)
+{
+    // Criação da tabela de símbolos
+    std::unordered_map<std::string, IdentifierType> symbolTable;
 
-    for (const auto &token : tokens)
+    for (size_t i = 0; i < tokens.size(); ++i)
     {
-        if (token.first == "var")
+        std::pair<std::string, std::string> token = tokens[i];
+
+        // Se encontrarmos uma declaração de variável ou função, adicionamos ao mapa
+        if (token.second == "IDENTIFIER" && i > 0 && tokens[i - 1].first == "var")
         {
-            declaring = true;
+            symbolTable[token.first] = VARIABLE;
         }
-        else if (token.first == ";")
+        else if (token.second == "IDENTIFIER" && i > 0 && tokens[i - 1].first == "function")
         {
-            declaring = false;
+            symbolTable[token.first] = FUNCTION;
         }
-        else if (token.first == "function" || token.first == "procedure")
+
+        // Se encontrarmos uma chamada de função, verificamos se a função existe na tabela de símbolos
+        if (token.second == "IDENTIFIER" && i + 1 < tokens.size() && tokens[i + 1].first == "(")
         {
+            if (symbolTable.count(token.first) == 0 || symbolTable[token.first] != FUNCTION)
+            {
+                std::cout << "Erro: Chamada de função não declarada '" << token.first << "'.\n";
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// Adicione esta estrutura à sua lista de estruturas de dados
+struct FunctionSignature
+{
+    std::string name;
+    std::vector<std::string> parameters;
+};
+
+// Função para verificar correspondência de parâmetros
+bool checkParameterMismatch(const std::vector<std::pair<std::string, std::string>> &tokens) {
+    unordered_map<string, vector<string>> functionParameters;
+    unordered_set<string> declaredFunctions;
+    vector<string> currentParameters;
+    string currentFunction;
+    bool declaringFunction = false;
+    bool callingFunction = false;
+
+    for (const auto &token : tokens) {
+        if (token.first == "function") {
             declaringFunction = true;
         }
-        else if (token.first == "(")
-        {
-            declaring = true;
+        else if (declaringFunction && token.second == "IDENTIFIER") {
+            currentFunction = token.first;
+            declaredFunctions.insert(currentFunction);
         }
-        else if (token.first == ")")
-        {
+        else if (declaringFunction && token.second == "DELIMITER" && token.first == "(") {
+            currentParameters.clear();
+        }
+        else if (declaringFunction && token.second == "IDENTIFIER") {
+            currentParameters.push_back(token.first);
+        }
+        else if (declaringFunction && token.second == "DELIMITER" && token.first == ")") {
+            functionParameters[currentFunction] = currentParameters;
             declaringFunction = false;
-            declaring = false;
         }
-        else if (declaring && token.second == "IDENTIFIER")
-        {
-            declaredVariables.insert(token.first);
+        else if (!declaringFunction && declaredFunctions.count(token.first) > 0) {
+            callingFunction = true;
+            currentFunction = token.first;
         }
-        else if (!declaringFunction && token.second == "IDENTIFIER" && !declaring && declaredVariables.count(token.first) == 0)
-        {
-            undeclaredVariables.insert(token.first);
+        else if (callingFunction && token.second == "NUMBER") {
+            if (functionParameters[currentFunction].size() < 1) {
+                cout << "Erro: Mismatch de parâmetros na chamada da função '" << currentFunction << "'.\n";
+                return false;
+            }
+            functionParameters[currentFunction].erase(functionParameters[currentFunction].begin());
+        }
+        else if (callingFunction && token.second == "DELIMITER" && token.first == ")") {
+            if (!functionParameters[currentFunction].empty()) {
+                cout << "Erro: Mismatch de parâmetros na chamada da função '" << currentFunction << "'.\n";
+                return false;
+            }
+            callingFunction = false;
         }
     }
 
-    // Printa se tiver
-    if (!undeclaredVariables.empty())
-    {
-        std::cout << "Identificadores não declarados:\n";
-        for (const auto &var : undeclaredVariables)
-        {
-            std::cout << var << std::endl;
-        }
-        return true;
-    }
-    else
-    {
-        std::cout << "Identificadores estão okay.\n";
-    }
-
-    return false;
+    return true;
 }
+
 
 int main()
 {
     std::vector<std::pair<std::string, std::string>> tokens = {
         {"var", "KEYWORD"},
-        {"teste", "IDENTIFIER"},
+        {"a", "IDENTIFIER"},
         {":", "DELIMITER"},
         {"integer", "KEYWORD"},
         {";", "DELIMITER"},
@@ -200,30 +240,25 @@ int main()
         {")", "DELIMITER"},
         {":", "DELIMITER"},
         {"integer", "KEYWORD"},
-        {";", "DELIMITER"},
+        {"begin", "KEYWORD"},
         {"var", "KEYWORD"},
         {"ia", "IDENTIFIER"},
         {"integer", "KEYWORD"},
         {";", "DELIMITER"},
-        {"teste", "IDENTIFIER"},
-        {"=", "DELIMITER"},
-        {"teste", "IDENTIFIER"},
-        {"*", "DELIMITER"},
-        {"ib", "IDENTIFIER"},
-        {";", "DELIMITER"},
         {"end", "KEYWORD"},
         {";", "DELIMITER"},
+        {"myFunc", "IDENTIFIER"},
+        {"(", "DELIMITER"},
+        {"3", "NUMBER"},
+        {",", "DELIMITER"},
+        {"2", "NUMBER"},
+        {")", "DELIMITER"},
     };
 
-    bool result = checkTypeCompatibility(tokens);
-
-    if (result)
-        std::cout << "Nenhum erro encontrado.\n";
-    else
-        std::cout << "Erro encontrado.\n";
-
+    checkTypeCompatibility(tokens);
     checkReservedIdentifierMisuse(tokens);
-    computeUndeclaredVariables(tokens);
+    checkFunctionExistence(tokens);
+    checkParameterMismatch(tokens);
 
     return 0;
 }
