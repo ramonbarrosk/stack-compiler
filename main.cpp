@@ -53,7 +53,7 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
         {
             currentType = token.first;
         }
-        else if (token.second == "IDENTIFIER" && declaring)
+        else if (token.second == "IDENTIFIER" && declaring && i + 1 < tokens.size() && tokens[i + 1].first == ":") // variable declaration
         {
             if ((declaringFunction && functionParameters.count(token.first) > 0) ||
                 (!declaringFunction && declaredVariables[currentScope].count(token.first) > 0))
@@ -66,7 +66,7 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
             if (declaringFunction)
                 functionParameters.insert(token.first);
         }
-        else if (token.second == "IDENTIFIER" && !declaring)
+        else if (token.second == "IDENTIFIER" && !(declaring && i + 1 < tokens.size() && tokens[i + 1].first == ":")) // variable access
         {
             if (declaredVariables[currentScope].count(token.first) == 0)
             {
