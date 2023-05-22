@@ -286,6 +286,10 @@ bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::st
 
 int main()
 {
+    string fileName = "example-file.txt";
+    vector<string> fileInput = getFileInput(fileName);
+    vector<Token> lexycal_tokens = lexicalAnalyzer(fileInput);
+    
     std::vector<std::pair<std::string, std::string>> tokens = {
         {"var", "KEYWORD"},
         {"a", "IDENTIFIER"},
