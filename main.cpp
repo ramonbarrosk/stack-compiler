@@ -79,9 +79,17 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
             if (i > 0 && i + 1 < tokens.size())
             {
                 std::string var = tokens[i - 1].first;
-                if (scopeTypeMap[currentScope][var] == "integer" && tokens[i + 1].second != "NUMBER")
+                std::string assignedType = scopeTypeMap[currentScope][var];
+                std::string valueType = tokens[i + 1].second;
+
+                if (assignedType == "integer" && valueType != "NUMBER")
                 {
-                    std::cout << "Erro: Incompatibilidade de tipo na atribuição à variável '" << var << "'. Esperado: NUMBER, Obtido: " << tokens[i + 1].second << "\n";
+                    std::cout << "Erro: Incompatibilidade de tipo na atribuição à variável '" << var << "'. Esperado: NUMBER, Obtido: " << valueType << "\n";
+                    return false;
+                }
+                else if (assignedType == "real" && valueType != "NUMBER")
+                {
+                    std::cout << "Erro: Incompatibilidade de tipo na atribuição à variável '" << var << "'. Esperado: NUMBER, Obtido: " << valueType << "\n";
                     return false;
                 }
             }
