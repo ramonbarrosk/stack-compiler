@@ -289,43 +289,10 @@ int main()
     string fileName = "example-file.txt";
     vector<string> fileInput = getFileInput(fileName);
     vector<Token> lexycal_tokens = lexicalAnalyzer(fileInput);
-    
-    std::vector<std::pair<std::string, std::string>> tokens = {
-        {"var", "KEYWORD"},
-        {"a", "IDENTIFIER"},
-        {":", "DELIMITER"},
-        {"integer", "KEYWORD"},
-        {";", "DELIMITER"},
-        {"function", "KEYWORD"},
-        {"myFunc", "IDENTIFIER"},
-        {"(", "DELIMITER"},
-        {"var", "KEYWORD"},
-        {"id", "IDENTIFIER"},
-        {":", "DELIMITER"},
-        {"integer", "KEYWORD"},
-        {",", "DELIMITER"},
-        {"var", "KEYWORD"},
-        {"ib", "IDENTIFIER"},
-        {":", "DELIMITER"},
-        {"integer", "KEYWORD"},
-        {")", "DELIMITER"},
-        {":", "DELIMITER"},
-        {"integer", "KEYWORD"},
-        {"begin", "KEYWORD"},
-        {"var", "KEYWORD"},
-        {"ia", "IDENTIFIER"},
-        {":", "DELIMITER"},
-        {"integer", "KEYWORD"},
-        {";", "DELIMITER"},
-        {"end", "KEYWORD"},
-        {";", "DELIMITER"},
-        {"myFunc", "IDENTIFIER"},
-        {"(", "DELIMITER"},
-        {"3", "NUMBER"},
-        {",", "DELIMITER"},
-        {"2", "NUMBER"},
-        {")", "DELIMITER"},
-    };
+    vector<std::pair<std::string, std::string>> tokens;
+    for (const Token& token : lexycal_tokens) {
+        tokens.emplace_back(token.content, token.type);
+    }
 
     checkTypeCompatibility(tokens);
     checkReservedIdentifierMisuse(tokens);

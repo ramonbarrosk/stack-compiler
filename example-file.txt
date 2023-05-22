@@ -1,9 +1,8 @@
-program exemplo1;
 var declaracionisssss: integer;
 function teste(var oi: integer): integer; 
 begin
-    inverte(#1#);
     concatena(#1,2#,##);
+    inverte(#1#);
     +(1,2);
     read(a);
     write(y);

@@ -22,7 +22,6 @@ vector<Token> lexicalAnalyzerAutomata(vector<string> commands)
     vector<Token> allTokens;
     for (string command : commands)
     {
-        cout << command <<" \n";
         bool isAnEmptyLine = command.length() == 0;
         if (isAnEmptyLine)
             continue;
