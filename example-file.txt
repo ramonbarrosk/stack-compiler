@@ -1,23 +1,23 @@
-var declaracionisssss: integer;
+var ola: integer;
 var id: integer;
 var x: integer;
+x=2
 function teste(var oi: integer): integer; 
 begin
     var a: integer;
     var y: integer;
-    y=1.5;
+    y=1;
     concatena(#1.4,2#,##);
-    -(1.5,2);
+    -(oi,2);
     read(a);
     write(y);
     if (>(2,10)) then begin var novaVar: integer; end;
 end
-begin
-    for id 1 to 10 do begin end;
-    write(x); 
-    teste(1);
-    repeat +(1,2) until >(2,1)
-    while (>(2,1)) do begin end;
-end
+
+for id 1 to 10 do begin end;
+write(x); 
+teste(1);
+repeat +(1,2) until >(2,1)
+while (>(2,1)) do begin end;
 
 teste(2);

@@ -12,7 +12,9 @@
 using namespace std;
 
 typedef struct aux {
-  string content;
-  string type;    
-  int line;
+    std::string content;
+    std::string type;
+    std::string scope;
+    std::string value;  // Novo campo para armazenar o valor (se disponível)
+    int line;  // Linha em que o token aparece
 } Token;
