@@ -311,63 +311,70 @@ void checkParameterMismatch(const std::vector<std::pair<std::string, std::string
     }
 }
 
-bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::string>> &tokens)
+void computeUndeclaredVariables(const std::vector<Token>& tokens) 
 {
-    std::unordered_set<std::string> declaredVariables;
-    std::unordered_set<std::string> undeclaredVariables;
+    std::unordered_map<std::string, IdentifierType> symbolTable;
+    std::unordered_map<std::string, bool> variableDeclared;
+    std::unordered_map<std::string, bool> functionDeclared;
 
-    bool declaring = false;
-    bool declaringFunction = false;
+    bool inFunction = false;
+    std::string currentFunction;
 
-    for (const auto &token : tokens)
+    for (size_t i = 0; i < tokens.size(); ++i)
     {
-        if (token.first == "var")
+        const Token& token = tokens[i];
+
+        if (token.content == "function" || token.content == "procedure")
         {
-            declaring = true;
+            inFunction = true;
+            currentFunction = tokens[i + 1].content;
+            functionDeclared[currentFunction] = true;
         }
-        else if (token.first == ";")
+        else if (token.content == "begin")
         {
-            declaring = false;
+            variableDeclared.clear();
         }
-        else if (token.first == "function" || token.first == "procedure")
+        else if (token.content == "end")
         {
-            declaringFunction = true;
+            inFunction = false;
+            currentFunction.clear();
         }
-        else if (token.first == "(")
+        else if (token.type == "identifier" && !isAKeyword(token.content))
         {
-            declaring = true;
+            if (!inFunction && symbolTable.find(token.content) == symbolTable.end() && variableDeclared.find(token.content) == variableDeclared.end() && !functionDeclared[token.content])
+            {
+                std::cout << "Erro: Variável ou função '" << token.content << "' não declarada.\n";
+            }
+            else if (inFunction && variableDeclared.find(token.content) == variableDeclared.end())
+            {
+                if (symbolTable.find(token.content) == symbolTable.end() && !functionDeclared[token.content])
+                {
+                    std::cout << "Erro: Variável ou função '" << token.content << "' não declarada dentro da função '" << currentFunction << "'.\n";
+                }
+            }
         }
-        else if (token.first == ")")
+        else if (token.content == "var")
         {
-            declaringFunction = false;
-            declaring = false;
-        }
-        else if (declaring && token.second == "IDENTIFIER")
-        {
-            declaredVariables.insert(token.first);
-        }
-        else if (!declaringFunction && token.second == "IDENTIFIER" && !declaring && declaredVariables.count(token.first) == 0)
-        {
-            undeclaredVariables.insert(token.first);
+            std::string variableName;
+
+            // Find the variable name after "var" keyword
+            while (i + 1 < tokens.size() && tokens[i + 1].type == "identifier")
+            {
+                variableName = tokens[i + 1].content;
+                ++i;
+
+                if (!isAKeyword(variableName) && symbolTable.find(variableName) == symbolTable.end() && variableDeclared.find(variableName) == variableDeclared.end())
+                {
+                    variableDeclared[variableName] = true;
+                    symbolTable[variableName] = IdentifierType::VARIABLE;
+                }
+                else
+                {
+                    std::cout << "Erro: Declaração duplicada da variável '" << variableName << "'.\n";
+                }
+            }
         }
     }
-
-    // Printa se tiver
-    if (!undeclaredVariables.empty())
-    {
-        std::cout << "Identificadores não declarados:\n";
-        for (const auto &var : undeclaredVariables)
-        {
-            std::cout << var << std::endl;
-        }
-        return true;
-    }
-    else
-    {
-        std::cout << "Identificadores estão okay.\n";
-    }
-
-    return false;
 }
 
 int main()
@@ -397,7 +404,7 @@ int main()
     checkReservedIdentifierMisuse(tokens);
     checkFunctionExistence(pairs);
     checkParameterMismatch(pairs);
-    computeUndeclaredVariables(pairs);
+    computeUndeclaredVariables(tokens);
 
     return 0;
 }

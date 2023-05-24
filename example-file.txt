@@ -19,4 +19,4 @@ begin
     while (>(2,1)) do begin end;
 end
 
-teste();
+teste(2);
