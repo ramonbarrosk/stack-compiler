@@ -1,8 +1,12 @@
-program teste;
-var x: integer;
+program RecursivePrintNumber;
+
+procedure RecursivePrintNumber(num: integer);
 begin
-    x:=2312;
-    writeln(x);
-    writeln(2);
-    writeln('doug é gay');
+  writeln(num);
+  if num < 10 then
+    RecursivePrintNumber(num+2);
+end;
+
+begin
+  RecursivePrintNumber(5);
 end.
