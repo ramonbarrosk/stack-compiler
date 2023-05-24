@@ -14,4 +14,5 @@ using namespace std;
 typedef struct aux {
   string content;
   string type;    
+  int line;
 } Token;

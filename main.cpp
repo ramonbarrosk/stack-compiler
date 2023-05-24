@@ -14,6 +14,63 @@
 
 using namespace std;
 
+vector<Token> lexical_analysis(string code)
+{
+    vector<Token> tokens;
+
+    vector<string> keywords = {"program", "begin", "end", "var", "integer", "real", "pilha", "of", "procedure",
+                               "function", "read", "write", "for", "to", "do", "repeat", "until", "while", "if", "then", "else"};
+
+    vector<string> operators = {">=", "<=", "<>", "//", "##", ">", "<", "+", "-", "*", "/", ":="};
+
+    vector<string> delimiters = {"(", ")", "[", "]", "{", "}", ";", ",", "#", ":", "."};
+
+    regex pattern("([a-zA-Z_][a-zA-Z_0-9]*|\\b[0-9]*\\.[0-9]+\\b|\\b[0-9]+\\b|[\\(\\)\\,\\=\\;\\#\\+\\-\\*\\/\\>\\<\\:\\.]|>=|<=|<>|//|##|:=)");
+
+    smatch match;
+
+    int lineNumber = 1;
+
+    while (regex_search(code, match, pattern))
+    {
+        string match_str = match[0];
+
+        // Update line number
+        lineNumber += count(match_str.begin(), match_str.end(), '\n');
+
+        // Check for 2-position operators first
+        auto op = find(operators.begin(), operators.end(), match_str);
+        if (op != operators.end() && match_str.length() == 2)
+        {
+            tokens.push_back({match_str, "operator", lineNumber});
+            code = match.suffix().str();
+            continue;
+        }
+
+        // Check for remaining types
+        string type;
+        if (find(keywords.begin(), keywords.end(), match_str) != keywords.end())
+            type = "keyword";
+        else if (find(delimiters.begin(), delimiters.end(), match_str) != delimiters.end())
+            type = "delimiter";
+        else if (regex_match(match_str, regex("[a-zA-Z_][a-zA-Z_0-9]*")))
+            type = "identifier";
+        else if (regex_match(match_str, regex("\\b[0-9]*\\.[0-9]+\\b")))
+            type = "real";
+        else if (regex_match(match_str, regex("\\b[0-9]+\\b")))
+            type = "integer";
+        else if (op != operators.end())
+            type = "operator";
+
+        tokens.push_back({match_str, type, lineNumber});
+
+        // Remove the identified token from the code
+        code = match.suffix().str();
+    }
+
+    return tokens;
+}
+
 // Função para verificar a compatibilidade do tipo
 bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string>> &tokens)
 {
@@ -74,7 +131,7 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
                 return false;
             }
         }
-         else if (token.second == "OPERATOR" && token.first == ":=")
+        else if (token.second == "OPERATOR" && token.first == ":=")
         {
             if (i > 0 && i + 1 < tokens.size())
             {
@@ -105,25 +162,18 @@ bool checkTypeCompatibility(const std::vector<std::pair<std::string, std::string
 }
 
 // Função para verificar o uso indevido de identificadores reservados
-bool checkReservedIdentifierMisuse(const std::vector<std::pair<std::string, std::string>> &tokens)
+void checkReservedIdentifierMisuse(vector<Token> &tokens)
 {
-    // Definindo uma lista de identificadores reservados
-    std::unordered_set<std::string> reservedIdentifiers = {
-        "begin", "end", "var", "integer", "real", "function", "procedure"
-        // Adicione mais palavras-chave conforme necessário
-    };
+    vector<string> reservedIdentifiers = {"program", "begin", "end", "var", "integer", "real", "pilha", "of", "procedure", "concatena",
+                                          "function", "read", "write", "for", "to", "do", "repeat", "until", "while", "if", "then", "else"};
 
-    for (size_t i = 0; i < tokens.size(); ++i)
+    for (size_t i = 0; i < tokens.size() - 1; i++)
     {
-        std::pair<std::string, std::string> token = tokens[i];
-        if (token.second == "IDENTIFIER" && reservedIdentifiers.count(token.first) > 0)
+        if (tokens[i].content == "var" && std::find(reservedIdentifiers.begin(), reservedIdentifiers.end(), tokens[i + 1].content) != reservedIdentifiers.end())
         {
-            std::cout << "Erro: Uso indevido do identificador reservado '" << token.first << "'.\n";
-            return false;
+            cout << "Erro: Uso indevido do identificador reservado '" << tokens[i + 1].content << "' na linha " << tokens[i].line << endl;
         }
     }
-
-    return true;
 }
 
 // Adicione à sua lista de tipos de identificador
@@ -136,35 +186,41 @@ enum IdentifierType
 // Função para verificar a existência de funções
 bool checkFunctionExistence(const std::vector<std::pair<std::string, std::string>> &tokens)
 {
-    // Criação da tabela de símbolos
     std::unordered_map<std::string, IdentifierType> symbolTable;
+
+    std::vector<std::string> reservedIdentifiers = {"program", "begin", "end", "var", "integer", "real", "pilha", "of", "procedure", "concatena",
+                                                    "function", "read", "write", "for", "to", "do", "repeat", "until", "while", "if", "then", "else"};
+
+    bool hasErrors = false;
 
     for (size_t i = 0; i < tokens.size(); ++i)
     {
-        std::pair<std::string, std::string> token = tokens[i];
+        const std::string &content = tokens[i].first;
+        const std::string &type = tokens[i].second;
 
-        // Se encontrarmos uma declaração de variável ou função, adicionamos ao mapa
-        if (token.second == "IDENTIFIER" && i > 0 && tokens[i - 1].first == "var")
+        if (type == "identifier" && i > 0 && tokens[i - 1].first == "var")
         {
-            symbolTable[token.first] = VARIABLE;
+            symbolTable[content] = VARIABLE;
         }
-        else if (token.second == "IDENTIFIER" && i > 0 && tokens[i - 1].first == "function")
+        else if (type == "identifier" && i > 0 && tokens[i - 1].first == "function")
         {
-            symbolTable[token.first] = FUNCTION;
+            symbolTable[content] = FUNCTION;
         }
 
-        // Se encontrarmos uma chamada de função, verificamos se a função existe na tabela de símbolos
-        if (token.second == "IDENTIFIER" && i + 1 < tokens.size() && tokens[i + 1].first == "(")
+        if (type == "identifier" && i + 1 < tokens.size() && tokens[i + 1].first == "(")
         {
-            if (symbolTable.count(token.first) == 0 || symbolTable[token.first] != FUNCTION)
+            if (symbolTable.count(content) == 0 || symbolTable[content] != FUNCTION)
             {
-                std::cout << "Erro: Chamada de função não declarada '" << token.first << "'.\n";
-                return false;
+                if (std::find(reservedIdentifiers.begin(), reservedIdentifiers.end(), content) == reservedIdentifiers.end())
+                {
+                    std::cout << "Error: Undeclared function call '" << content << "'.\n";
+                    hasErrors = true;
+                }
             }
         }
     }
 
-    return true;
+    return !hasErrors;
 }
 
 // Adicione esta estrutura à sua lista de estruturas de dados
@@ -175,53 +231,84 @@ struct FunctionSignature
 };
 
 // Função para verificar correspondência de parâmetros
-bool checkParameterMismatch(const std::vector<std::pair<std::string, std::string>> &tokens) {
-    unordered_map<string, vector<string>> functionParameters;
-    unordered_set<string> declaredFunctions;
-    vector<string> currentParameters;
-    string currentFunction;
-    bool declaringFunction = false;
-    bool callingFunction = false;
+void checkParameterMismatch(const std::vector<std::pair<std::string, std::string>> &tokens)
+{
+    std::unordered_map<std::string, int> functionParameters;
 
-    for (const auto &token : tokens) {
-        if (token.first == "function") {
-            declaringFunction = true;
-        }
-        else if (declaringFunction && token.second == "IDENTIFIER") {
-            currentFunction = token.first;
-            declaredFunctions.insert(currentFunction);
-        }
-        else if (declaringFunction && token.second == "DELIMITER" && token.first == "(") {
-            currentParameters.clear();
-        }
-        else if (declaringFunction && token.second == "IDENTIFIER") {
-            currentParameters.push_back(token.first);
-        }
-        else if (declaringFunction && token.second == "DELIMITER" && token.first == ")") {
-            functionParameters[currentFunction] = currentParameters;
-            declaringFunction = false;
-        }
-        else if (!declaringFunction && declaredFunctions.count(token.first) > 0) {
-            callingFunction = true;
-            currentFunction = token.first;
-        }
-        else if (callingFunction && token.second == "NUMBER") {
-            if (functionParameters[currentFunction].size() < 1) {
-                cout << "Erro: Mismatch de parâmetros na chamada da função '" << currentFunction << "'.\n";
-                return false;
+    for (size_t i = 0; i < tokens.size(); ++i)
+    {
+        const std::string &content = tokens[i].first;
+        const std::string &type = tokens[i].second;
+
+        if (type == "identifier" && i > 0 && tokens[i - 1].first == "function")
+        {
+            std::string functionName = content;
+            int paramCount = 0;
+            int paramVarCount = 0;
+
+            // Encontra o ponto inicial dos parâmetros
+            size_t j = i + 1;
+            while (j < tokens.size() && tokens[j].first != "(")
+            {
+                ++j;
             }
-            functionParameters[currentFunction].erase(functionParameters[currentFunction].begin());
-        }
-        else if (callingFunction && token.second == "DELIMITER" && token.first == ")") {
-            if (!functionParameters[currentFunction].empty()) {
-                cout << "Erro: Mismatch de parâmetros na chamada da função '" << currentFunction << "'.\n";
-                return false;
+
+            if (j < tokens.size())
+            {
+                // Conta as variáveis e verifica se não são palavras-chave
+                ++j;
+                while (j < tokens.size() && tokens[j].first != ")")
+                {
+                    if (tokens[j].first == "var")
+                    {
+                        ++paramVarCount;
+                        if (j + 1 < tokens.size() && tokens[j + 1].second == "identifier" && !isAKeyword(tokens[j + 1].first))
+                        {
+                            ++paramCount;
+                        }
+                    }
+                    ++j;
+                }
             }
-            callingFunction = false;
+
+            // Armazena o nome da função e a contagem de parâmetros
+            functionParameters[functionName] = paramCount;
+        }
+        else if (type == "identifier" && !isAKeyword(content) && i + 1 < tokens.size() && tokens[i + 1].first == "(")
+        {
+            std::string functionName = content;
+            int paramCount = 0;
+
+            // Encontra o nome da função nos parâmetros armazenados
+            if (functionParameters.count(functionName) > 0)
+            {
+                paramCount = functionParameters[functionName];
+            }
+
+            // Compara a contagem de parâmetros armazenada com a contagem de parâmetros atual
+            size_t j = i + 2;         // Pula os parênteses da chamada da função
+            int actualParamCount = 1; // Começa com 1 para o próprio nome da função
+            if (tokens[j].first == ")")
+            {
+                std::cout << "Erro: a função não possui os parâmetros necessários, a função: " << functionName << " precisa de " << paramCount << " parâmetros.\n";
+                return;
+            }
+            while (j < tokens.size() && tokens[j].first != ")")
+            {
+                cout << tokens[j].first << endl;
+                if (tokens[j].first == ",")
+                {
+                    ++actualParamCount;
+                }
+                ++j;
+            }
+
+            if (paramCount != actualParamCount)
+            {
+                std::cout << "Erro: Mismatch de parâmetros na chamada da função '" << functionName << "'.\n";
+            }
         }
     }
-
-    return true;
 }
 
 bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::string>> &tokens)
@@ -283,22 +370,34 @@ bool computeUndeclaredVariables(const std::vector<std::pair<std::string, std::st
     return false;
 }
 
-
 int main()
 {
     string fileName = "example-file.txt";
     vector<string> fileInput = getFileInput(fileName);
-    vector<Token> lexycal_tokens = lexicalAnalyzer(fileInput);
-    vector<std::pair<std::string, std::string>> tokens;
-    for (const Token& token : lexycal_tokens) {
-        tokens.emplace_back(token.content, token.type);
+
+    std::string combinedInput;
+    for (const auto &line : fileInput)
+    {
+        combinedInput += line + "\n"; // Preserving line breaks
     }
 
-    checkTypeCompatibility(tokens);
+    vector<Token> tokens = lexical_analysis(combinedInput);
+    // for (const auto &token : tokens)
+    // {
+    //     cout << "Content: " << token.content << ", Type: " << token.type << endl;
+    // }
+
+    vector<pair<string, string>> pairs;
+    for (const auto &token : tokens)
+    {
+        pairs.push_back(make_pair(token.content, token.type));
+    }
+
+    checkTypeCompatibility(pairs);
     checkReservedIdentifierMisuse(tokens);
-    checkFunctionExistence(tokens);
-    checkParameterMismatch(tokens);
-    computeUndeclaredVariables(tokens);
+    checkFunctionExistence(pairs);
+    checkParameterMismatch(pairs);
+    computeUndeclaredVariables(pairs);
 
     return 0;
 }
