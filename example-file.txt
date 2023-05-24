@@ -5,8 +5,9 @@ function teste(var oi: integer): integer;
 begin
     var a: integer;
     var y: integer;
+    y=1.5;
     concatena(#1.4,2#,##);
-    +(1,2);
+    -(1.5,2);
     read(a);
     write(y);
     if (>(2,10)) then begin var novaVar: integer; end;

@@ -177,11 +177,7 @@ void checkReservedIdentifierMisuse(vector<Token> &tokens)
 }
 
 // Adicione à sua lista de tipos de identificador
-enum IdentifierType
-{
-    VARIABLE,
-    FUNCTION
-};
+enum IdentifierType { INTEGER, REAL, FUNCTION, VARIABLE, UNDEFINED };
 
 // Função para verificar a existência de funções
 bool checkFunctionExistence(const std::vector<std::pair<std::string, std::string>> &tokens)
@@ -223,7 +219,118 @@ bool checkFunctionExistence(const std::vector<std::pair<std::string, std::string
     return !hasErrors;
 }
 
-// Adicione esta estrutura à sua lista de estruturas de dados
+
+bool checkFunctionAndValueType(const std::vector<std::pair<std::string, std::string>> &tokens)
+{
+    std::unordered_map<std::string, IdentifierType> symbolTable;
+
+    std::unordered_map<IdentifierType, std::string> checkEnum = {{INTEGER, "integer"}, {REAL, "real"}};
+
+    std::vector<std::string> reservedIdentifiers = {"program", "begin", "end", "var", "integer", "real", "pilha", "of", "procedure", "concatena",
+                                                    "function", "read", "write", "for", "to", "do", "repeat", "until", "while", "if", "then", "else"};
+
+    bool hasErrors = false;
+
+    for (size_t i = 0; i < tokens.size(); ++i)
+    {
+        const std::string &content = tokens[i].first;
+        const std::string &type = tokens[i].second;
+
+        if (type == "identifier" && i > 0 && tokens[i - 1].first == "var")
+        {
+            
+            if (i + 2 < tokens.size() && tokens[i + 2].first == "integer")
+            {   
+                symbolTable[content] = INTEGER;
+            }
+            else if (i + 2 < tokens.size() && tokens[i + 2].first == "real")
+            {
+
+                symbolTable[content] = REAL;
+            }
+            else
+            {
+                symbolTable[content] = VARIABLE;
+            }
+        }
+        // else if (type == "identifier" && i > 0 && tokens[i - 1].first == "function")
+        // {
+        //     symbolTable[content] = FUNCTION;
+        // }
+
+        //std::cout << "i: " << i << " Content: " << content << "Tipo: " << type << endl;
+       if ((type == "integer" || type == "real") && tokens[i-2].second == "identifier" && tokens[i-3].first != "(")
+        {
+            const std::string &content = tokens[i-2].first;
+            IdentifierType idType = symbolTable[content];
+
+            if ((idType == INTEGER && type == "real"))
+            {
+                std::cout << "Error: Incorrect value type for '" << content << "'.\n";
+                hasErrors = true;
+            }
+        }
+
+        else if (type == "operator" && (content == "+" || content == "-" || content == "*" || content == "/"))
+        {
+            const std::string &firstParamContent = tokens[i+2].first;
+            IdentifierType firstParamidType = symbolTable[firstParamContent];
+            const std::string &type1 = tokens[i+2].second;
+
+            const std::string &secondParamContent = tokens[i+4].first;
+            IdentifierType secondParamidType = symbolTable[secondParamContent];
+            const std::string &type2 = tokens[i+4].second;
+
+            if (type1 == "identifier"){
+                if (type2 == "identifier"){
+                    if (firstParamidType != secondParamidType){
+                        std::cout << "Você está tentando operar tipos inválidos...\n";
+                    }
+                }
+                else{
+                    std::string currentType = checkEnum[firstParamidType];
+                    if (currentType != type2){
+                        std::cout << "Você está tentando operar tipos inválidos...\n";
+                    }
+                }
+            }
+
+            else {
+                if (type2 == "identifier"){
+                    std::string currentType = checkEnum[secondParamidType];
+                    if (type1 != currentType){
+                        std::cout << "Você está tentando operar tipos inválidos...\n";
+                    }
+                }
+                else{
+                    if (type1 != type2){
+                        std::cout << "Você está tentando operar tipos inválidos...\n";
+                    }
+                }
+            }
+
+            // std::cout << "Primeiro content: " << firstParamContent << "Segundo content: " << secondParamContent << endl;
+            // std::cout << "SymbolTable param: " << firstParamidType << "SymbolTable param: " << secondParamidType << endl;
+            // std::cout << "Tipo param1: " << type1 << "Tipo param2: " << type2 << endl;
+
+            // for (auto it = symbolTable.begin(); it != symbolTable.end(); ++it) {
+            //     const std::string& key = it->first;
+            //     IdentifierType value = it->second;
+            //     std::cout << "Key: " << key << ", Value: " << value << std::endl;
+            // }
+
+            // if ((idType == INTEGER && type == "real" && content != "("))
+            // {
+            //     std::cout << "Error: Incorrect value type for '" << content << "'.\n";
+            //     hasErrors = true;
+            // }
+        }
+    }
+
+    return !hasErrors;
+}
+
+
 struct FunctionSignature
 {
     std::string name;
@@ -405,6 +512,7 @@ int main()
     checkFunctionExistence(pairs);
     checkParameterMismatch(pairs);
     computeUndeclaredVariables(tokens);
+    checkFunctionAndValueType(pairs);
 
     return 0;
 }
