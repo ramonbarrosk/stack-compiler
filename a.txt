@@ -1,0 +1,7 @@
+Free Pascal Compiler version 3.2.2+dfsg-9ubuntu1 [2022/04/11] for x86_64
+Copyright (c) 1993-2021 by Florian Klaempfl and others
+Target OS: Linux for x86-64
+Compiling a.pas
+a.pas(4,13) Fatal: illegal character "'"'" ($22)
+Fatal: Compilation aborted
+Error: /usr/bin/ppcx64 returned an error exitcode

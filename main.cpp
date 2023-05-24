@@ -610,5 +610,8 @@ int main()
     computeUndeclaredVariables(tokens);
     checkFunctionAndValueType(tokens);
 
+    std::string command = "python3 readcode.py";
+    std::system(command.c_str());
+
     return 0;
 }
